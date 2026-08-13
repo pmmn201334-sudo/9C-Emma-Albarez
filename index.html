@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estación Lumina · Inicio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --fondo:#0B1026;
+      --texto:#F4F6FF;
+      --acento:#00E5A0;
+      --acento-oscuro:#00C48A;
+      --tarjeta:rgba(244,246,255,0.06);
+      --borde:rgba(244,246,255,0.18);
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{
+      font-family:'Space Grotesk','Segoe UI',Arial,sans-serif;
+      background:var(--fondo);
+      color:var(--texto);
+      min-height:100vh;
+      padding:1.5rem 1rem 3rem;
+      background-image:
+        radial-gradient(circle at 20% 15%,rgba(0,229,160,0.12),transparent 40%),
+        radial-gradient(circle at 85% 85%,rgba(0,229,160,0.10),transparent 40%);
+      background-attachment:fixed;
+    }
+    .contenedor{max-width:840px;margin:0 auto;}
+    h1{font-size:2.5rem;line-height:1.15;margin-bottom:.5rem;}
+    h2{font-size:1.6rem;color:var(--acento);margin-bottom:1rem;}
+    h3{font-size:1.2rem;}
+    p{line-height:1.6;}
+    .encabezado{text-align:center;margin-bottom:2rem;}
+    .encabezado p{opacity:.85;}
+    .barra-superior{display:flex;justify-content:space-between;align-items:center;max-width:840px;margin:0 auto 1.5rem;}
+    .barra-superior a{color:var(--acento);text-decoration:none;font-weight:700;}
+    .tarjeta{background:var(--tarjeta);border:1px solid var(--borde);border-radius:1.2rem;padding:1.5rem;margin:1.25rem 0;}
+    .boton{
+      display:inline-block;
+      background:var(--acento);
+      color:#06281C;
+      border:none;
+      border-radius:999px;
+      padding:.85rem 1.7rem;
+      font-size:1rem;
+      font-weight:700;
+      font-family:inherit;
+      cursor:pointer;
+      text-decoration:none;
+      box-shadow:0 0 18px rgba(0,229,160,.35);
+      transition:transform .15s ease,background .15s ease;
+    }
+    .boton:hover{background:var(--acento-oscuro);transform:translateY(-2px);}
+    .boton.secundario{background:transparent;color:var(--texto);border:2px solid var(--borde);box-shadow:none;}
+    .boton.peligro{background:transparent;color:#FF5C5C;border:2px solid rgba(255,92,92,.5);box-shadow:none;padding:.45rem 1rem;font-size:.85rem;}
+    .boton.peligro:hover{background:rgba(255,92,92,.15);}
+    .fila-botones{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;}
+    input,textarea,select{
+      width:100%;
+      background:rgba(244,246,255,.05);
+      border:1px solid var(--borde);
+      border-radius:.8rem;
+      color:var(--texto);
+      padding:.7rem 1rem;
+      font-family:inherit;
+      font-size:1rem;
+    }
+    input:focus,textarea:focus{outline:2px solid var(--acento);}
+    label{display:block;margin:1rem 0 .3rem;opacity:.9;}
+    table{width:100%;border-collapse:collapse;background:var(--tarjeta);border:1px solid var(--borde);border-radius:1rem;overflow:hidden;}
+    th,td{border:1px solid var(--borde);padding:.6rem .4rem;text-align:center;font-size:.9rem;}
+    th{background:rgba(0,229,160,.15);color:var(--acento);}
+    .tabla-scroll{overflow-x:auto;}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;}
+    .logo{width:84px;height:84px;border-radius:50%;border:3px solid var(--acento);display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:700;color:var(--acento);margin:0 auto 1rem;box-shadow:0 0 25px rgba(0,229,160,.35);background:rgba(0,229,160,.08);}
+    .foto-perfil{width:180px;height:180px;border-radius:50%;border:3px solid var(--acento);object-fit:cover;margin:0 auto 1rem;display:block;box-shadow:0 0 25px rgba(0,229,160,.35);}
+    .modo-hacker th{background-color:#87CEFA!important;color:#000!important;}
+    .modo-hacker td{background-color:#FFD700!important;color:#000!important;}
+    .vacio{opacity:.7;text-align:center;padding:1rem;}
+  </style>
+</head>
+<body>
+  <div class="contenedor">
+    <header class="encabezado">
+      <img class="foto-perfil" src="foto.png" alt="Foto de Emma Albarez">
+      <h1>Estación Lumina</h1>
+      <p>El rincón espacial de Emma Albarez · Grado 9C</p>
+    </header>
+
+    <div class="fila-botones">
+      <button class="boton secundario" id="btn-toggle">Horario escolar</button>
+      <button class="boton secundario" id="btn-color">Modo hacker</button>
+      <a class="boton" href="registro.html">Registrarme</a>
+    </div>
+
+    <section class="tarjeta">
+      <h2>Presentación</h2>
+      <p>Hola, mi nombre es <b>Emma Albarez</b>, tengo 14 años, cumplo 15 el primero de agosto, estudio en el LSB (Liceo Santa Bernardita), me gustan las matemáticas, la danza y la música, estoy en 9 grado y quiero estudiar en la Universidad de los Andes, mi color favorito es el rosado y el negro y me gusta escuchar música.</p>
+      <p style="margin-top:.8rem;">En este sitio soy la piloto de la Estación Lumina. Aquí podrás ver mi horario escolar, crear tu cuenta de tripulante, jugar la Misión Estelar, escribir en mi bitácora y organizar tus misiones del día.</p>
+    </section>
+
+    <section class="tarjeta" id="horario">
+      <h2>Horario 9°C</h2>
+      <div class="tabla-scroll">
+        <table class="tabla" id="tabla-clases">
+          <tr>
+            <th>Hora</th>
+            <th>Dia 1</th>
+            <th>Dia 2</th>
+            <th>Dia 3</th>
+            <th>Dia 4</th>
+            <th>Dia 5</th>
+            <th>Dia 6</th>
+            <th>Dia 7</th>
+          </tr>
+          <tr>
+            <td>6:50</td>
+            <td>Español</td>
+            <td>Sociales</td>
+            <td>Estadística</td>
+            <td>Filosofía</td>
+            <td>Dibujo</td>
+            <td>Math</td>
+            <td>Sociales</td>
+          </tr>
+          <tr>
+            <td>7:45</td>
+            <td>Biología</td>
+            <td>Francés</td>
+            <td>Español</td>
+            <td>Francés</td>
+            <td>Skills</td>
+            <td>Edu.física</td>
+            <td>MEL</td>
+          </tr>
+          <tr>
+            <td>8:40</td>
+            <td>D</td>
+            <td>E</td>
+            <td>S</td>
+            <td>CA</td>
+            <td>N</td>
+            <td>S</td>
+            <td>O</td>
+          </tr>
+          <tr>
+            <td>9:35</td>
+            <td>Skills</td>
+            <td>Math</td>
+            <td>English</td>
+            <td>English</td>
+            <td>Sociales</td>
+            <td>Biología</td>
+            <td>English</td>
+          </tr>
+          <tr>
+            <td>10:30</td>
+            <td>Francés</td>
+            <td>Tecnologìa</td>
+            <td>PILEO</td>
+            <td>Math</td>
+            <td>Math</td>
+            <td>Física</td>
+            <td>Biología</td>
+          </tr>
+          <tr>
+            <td>11:25</td>
+            <td>English</td>
+            <td>Biología</td>
+            <td>Sociales</td>
+            <td>Robótica</td>
+            <td>Danzas</td>
+            <td>PILEO</td>
+            <td>Math</td>
+          </tr>
+          <tr>
+            <td>12:20</td>
+            <td>Geometry</td>
+            <td>Edu.física</td>
+            <td>Tecnología</td>
+            <td>Ética</td>
+            <td>Español</td>
+            <td>Sociales</td>
+            <td>Química</td>
+          </tr>
+          <tr>
+            <td>1:15</td>
+            <td>Cátedra</td>
+            <td>Español</td>
+            <td>Danzas</td>
+            <td>Biología</td>
+            <td>English</td>
+            <td>Sociales</td>
+            <td>Español</td>
+          </tr>
+          <tr>
+            <td>2:10</td>
+            <td>S</td>
+            <td>A</td>
+            <td>L</td>
+            <td>I</td>
+            <td>D</td>
+            <td>A</td>
+            <td>(*'-'*)</td>
+          </tr>
+        </table>
+      </div>
+    </section>
+
+    <div class="fila-botones">
+      <a class="boton" href="registro.html">Crear mi cuenta de tripulante</a>
+    </div>
+  </div>
+
+  <script>
+    const horario = document.getElementById('horario');
+    const btn = document.getElementById('btn-toggle');
+
+    horario.style.display = 'none';
+
+    btn.addEventListener('click', () => {
+        horario.style.display = horario.style.display === 'none' ? 'block' : 'none';
+    });
+
+    const botonColor = document.getElementById('btn-color');
+    const miTabla = document.getElementById('tabla-clases');
+
+    botonColor.addEventListener('click', () => {
+        miTabla.classList.toggle('modo-hacker');
+    });
+  </script>
+</body>
+</html>
