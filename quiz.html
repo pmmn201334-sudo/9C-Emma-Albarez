@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estación Lumina · Examen espacial</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --fondo:#0B1026;
+      --texto:#F4F6FF;
+      --acento:#00E5A0;
+      --acento-oscuro:#00C48A;
+      --tarjeta:rgba(244,246,255,0.06);
+      --borde:rgba(244,246,255,0.18);
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{
+      font-family:'Space Grotesk','Segoe UI',Arial,sans-serif;
+      background:var(--fondo);
+      color:var(--texto);
+      min-height:100vh;
+      padding:1.5rem 1rem 3rem;
+      background-image:
+        radial-gradient(circle at 20% 15%,rgba(0,229,160,0.12),transparent 40%),
+        radial-gradient(circle at 85% 85%,rgba(0,229,160,0.10),transparent 40%);
+      background-attachment:fixed;
+    }
+    .contenedor{max-width:840px;margin:0 auto;}
+    h1{font-size:2.5rem;line-height:1.15;margin-bottom:.5rem;}
+    h2{font-size:1.6rem;color:var(--acento);margin-bottom:1rem;}
+    h3{font-size:1.2rem;}
+    p{line-height:1.6;}
+    .encabezado{text-align:center;margin-bottom:2rem;}
+    .encabezado p{opacity:.85;}
+    .barra-superior{display:flex;justify-content:space-between;align-items:center;max-width:840px;margin:0 auto 1.5rem;}
+    .barra-superior a{color:var(--acento);text-decoration:none;font-weight:700;}
+    .tarjeta{background:var(--tarjeta);border:1px solid var(--borde);border-radius:1.2rem;padding:1.5rem;margin:1.25rem 0;}
+    .boton{
+      display:inline-block;
+      background:var(--acento);
+      color:#06281C;
+      border:none;
+      border-radius:999px;
+      padding:.85rem 1.7rem;
+      font-size:1rem;
+      font-weight:700;
+      font-family:inherit;
+      cursor:pointer;
+      text-decoration:none;
+      box-shadow:0 0 18px rgba(0,229,160,.35);
+      transition:transform .15s ease,background .15s ease;
+    }
+    .boton:hover{background:var(--acento-oscuro);transform:translateY(-2px);}
+    .boton.secundario{background:transparent;color:var(--texto);border:2px solid var(--borde);box-shadow:none;}
+    .fila-botones{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;}
+    input,textarea,select{
+      width:100%;
+      background:rgba(244,246,255,.05);
+      border:1px solid var(--borde);
+      border-radius:.8rem;
+      color:var(--texto);
+      padding:.7rem 1rem;
+      font-family:inherit;
+      font-size:1rem;
+    }
+    input:focus,textarea:focus{outline:2px solid var(--acento);}
+    label{display:block;margin:1rem 0 .3rem;opacity:.9;}
+    .vacio{opacity:.7;text-align:center;padding:1rem;}
+    #marcador{text-align:center;font-size:1.1rem;margin-bottom:1rem;}
+    #marcador b{color:var(--acento);}
+    .pregunta{font-size:1.15rem;margin-bottom:1rem;}
+    .opcion{
+      display:block;
+      width:100%;
+      text-align:left;
+      background:rgba(244,246,255,.05);
+      border:1px solid var(--borde);
+      border-radius:.9rem;
+      color:var(--texto);
+      padding:.85rem 1.1rem;
+      font-family:inherit;
+      font-size:1rem;
+      margin:.5rem 0;
+      cursor:pointer;
+      transition:border-color .15s,background .15s,transform .15s;
+    }
+    .opcion:hover{border-color:var(--acento);background:rgba(0,229,160,.08);transform:translateX(4px);}
+    .opcion.ok{border-color:var(--acento);background:rgba(0,229,160,.15);}
+    .opcion.mal{border-color:#FF5C5C;background:rgba(255,92,92,.15);}
+    .opcion:disabled{cursor:default;transform:none;}
+    #resultado{text-align:center;}
+    #resultado .nota{font-size:3rem;font-weight:700;color:var(--acento);margin:.5rem 0;}
+  </style>
+</head>
+<body>
+  <div class="contenedor">
+    <nav class="barra-superior">
+      <a href="menu.html">← Sala de Mando</a>
+      <span>Estación Lumina</span>
+    </nav>
+
+    <header class="encabezado">
+      <h1>Examen espacial</h1>
+      <p>Demuestra cuánto sabes sobre la Estación Lumina y su tripulación.</p>
+    </header>
+
+    <section class="tarjeta" id="intro">
+      <h2>Reglas de la misión</h2>
+      <p>Te haré <b>8 preguntas</b> sobre la estación. Elige la respuesta correcta en cada una.</p>
+      <p style="margin-top:.8rem;">No hay penalización por errar: ¡solo aprende y diviértete!</p>
+      <div class="fila-botones" style="margin-top:1.2rem;">
+        <button class="boton" onclick="iniciarQuiz()">Comenzar examen</button>
+      </div>
+    </section>
+
+    <section class="tarjeta" id="quizZona" hidden>
+      <div id="marcador">Pregunta <b id="numPregunta">1</b> de <b>8</b> · Aciertos: <b id="aciertos">0</b></div>
+      <p class="pregunta" id="preguntaTexto"></p>
+      <div id="opciones"></div>
+    </section>
+
+    <section class="tarjeta" id="resultado" hidden>
+      <h2>Resultado de la misión</h2>
+      <div class="nota" id="nota"></div>
+      <p id="resultadoTexto"></p>
+      <div class="fila-botones" style="margin-top:1.2rem;">
+        <button class="boton" onclick="location.reload()">Reintentar</button>
+        <a class="boton secundario" href="menu.html">Volver a la Sala de Mando</a>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const preguntas = [
+      { p: '¿Cómo se llama la estación espacial de este proyecto?', o: ['Estación Solar', 'Estación Lumina', 'Estación Stella', 'Estación Nova'], r: 1 },
+      { p: '¿Qué se está apagando en la estación al inicio de la historia?', o: ['Las luces de los pasillos', 'La radio de comunicación', 'El núcleo de la estación', 'Los motores de reserva'], r: 2 },
+      { p: 'En la Misión Estelar, ¿cuántas estrellas de energía debes atrapar?', o: ['5', '10', '15', '20'], r: 1 },
+      { p: '¿Con cuántas vidas empiezas la Misión Estelar?', o: ['1', '2', '3', '5'], r: 2 },
+      { p: '¿Qué objetos debes esquivar en la Misión Estelar?', o: ['Cometas', 'Satélites', 'Meteoritos', 'Basura espacial'], r: 2 },
+      { p: '¿Cómo se llama la bitácora donde escribes tu diario?', o: ['Diario de a bordo', 'Bitácora del piloto', 'Cuaderno de vuelo', 'Registro de la estación'], r: 1 },
+      { p: 'En las Misiones del día, ¿qué puedes hacer con cada tarea?', o: ['Completarla y eliminarla', 'Solo crearla', 'Solo verla', 'Imprimirla'], r: 0 },
+      { p: '¿Qué herramienta te ayuda a concentrarte para estudiar?', o: ['La calculadora de notas', 'El examen espacial', 'El temporizador de estudio', 'La bitácora'], r: 2 }
+    ];
+    let actual, aciertos;
+
+    function iniciarQuiz() {
+      document.getElementById('intro').hidden = true;
+      document.getElementById('quizZona').hidden = false;
+      document.getElementById('resultado').hidden = true;
+      actual = 0;
+      aciertos = 0;
+      pintarPregunta();
+    }
+
+    function pintarPregunta() {
+      const q = preguntas[actual];
+      document.getElementById('numPregunta').textContent = actual + 1;
+      document.getElementById('aciertos').textContent = aciertos;
+      document.getElementById('preguntaTexto').textContent = q.p;
+      const caja = document.getElementById('opciones');
+      caja.innerHTML = '';
+      q.o.forEach(function (opcion, i) {
+        const boton = document.createElement('button');
+        boton.className = 'opcion';
+        boton.textContent = opcion;
+        boton.onclick = function () { responder(i, boton); };
+        caja.appendChild(boton);
+      });
+    }
+
+    function responder(elegida, boton) {
+      const q = preguntas[actual];
+      const caja = document.getElementById('opciones');
+      const botones = caja.querySelectorAll('.opcion');
+      botones.forEach(function (b) { b.disabled = true; });
+      if (elegida === q.r) {
+        boton.className += ' ok';
+        aciertos++;
+        document.getElementById('aciertos').textContent = aciertos;
+      } else {
+        boton.className += ' mal';
+        botones[q.r].className += ' ok';
+      }
+      setTimeout(function () {
+        actual++;
+        if (actual < preguntas.length) {
+          pintarPregunta();
+        } else {
+          terminar();
+        }
+      }, 1200);
+    }
+
+    function terminar() {
+      document.getElementById('quizZona').hidden = true;
+      document.getElementById('resultado').hidden = false;
+      const nota = document.getElementById('nota');
+      const texto = document.getElementById('resultadoTexto');
+      nota.textContent = aciertos + ' / ' + preguntas.length;
+      if (aciertos === preguntas.length) {
+        texto.textContent = '¡Puntaje perfecto! Eres una comandante experta de la Estación Lumina.';
+      } else if (aciertos >= 5) {
+        texto.textContent = '¡Buen trabajo! Conoces bien la estación. Repasa el resto para ser perfecta.';
+      } else {
+        texto.textContent = 'Sigue explorando la Sala de Mando y vuelve a intentarlo: la estación te espera.';
+      }
+    }
+  </script>
+</body>
+</html>
