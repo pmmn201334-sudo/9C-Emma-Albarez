@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estación Lumina · Misión Estelar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --fondo:#0B1026;
+      --texto:#F4F6FF;
+      --acento:#00E5A0;
+      --acento-oscuro:#00C48A;
+      --tarjeta:rgba(244,246,255,0.06);
+      --borde:rgba(244,246,255,0.18);
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{
+      font-family:'Space Grotesk','Segoe UI',Arial,sans-serif;
+      background:var(--fondo);
+      color:var(--texto);
+      min-height:100vh;
+      padding:1.5rem 1rem 3rem;
+      background-image:
+        radial-gradient(circle at 20% 15%,rgba(0,229,160,0.12),transparent 40%),
+        radial-gradient(circle at 85% 85%,rgba(0,229,160,0.10),transparent 40%);
+      background-attachment:fixed;
+    }
+    .contenedor{max-width:840px;margin:0 auto;}
+    h1{font-size:2.5rem;line-height:1.15;margin-bottom:.5rem;}
+    h2{font-size:1.6rem;color:var(--acento);margin-bottom:1rem;}
+    h3{font-size:1.2rem;}
+    p{line-height:1.6;}
+    .encabezado{text-align:center;margin-bottom:2rem;}
+    .encabezado p{opacity:.85;}
+    .barra-superior{display:flex;justify-content:space-between;align-items:center;max-width:840px;margin:0 auto 1.5rem;}
+    .barra-superior a{color:var(--acento);text-decoration:none;font-weight:700;}
+    .tarjeta{background:var(--tarjeta);border:1px solid var(--borde);border-radius:1.2rem;padding:1.5rem;margin:1.25rem 0;}
+    .boton{
+      display:inline-block;
+      background:var(--acento);
+      color:#06281C;
+      border:none;
+      border-radius:999px;
+      padding:.85rem 1.7rem;
+      font-size:1rem;
+      font-weight:700;
+      font-family:inherit;
+      cursor:pointer;
+      text-decoration:none;
+      box-shadow:0 0 18px rgba(0,229,160,.35);
+      transition:transform .15s ease,background .15s ease;
+    }
+    .boton:hover{background:var(--acento-oscuro);transform:translateY(-2px);}
+    .boton.secundario{background:transparent;color:var(--texto);border:2px solid var(--borde);box-shadow:none;}
+    .boton.peligro{background:transparent;color:#FF5C5C;border:2px solid rgba(255,92,92,.5);box-shadow:none;padding:.45rem 1rem;font-size:.85rem;}
+    .boton.peligro:hover{background:rgba(255,92,92,.15);}
+    .fila-botones{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;}
+    input,textarea,select{
+      width:100%;
+      background:rgba(244,246,255,.05);
+      border:1px solid var(--borde);
+      border-radius:.8rem;
+      color:var(--texto);
+      padding:.7rem 1rem;
+      font-family:inherit;
+      font-size:1rem;
+    }
+    input:focus,textarea:focus{outline:2px solid var(--acento);}
+    label{display:block;margin:1rem 0 .3rem;opacity:.9;}
+    table{width:100%;border-collapse:collapse;background:var(--tarjeta);border:1px solid var(--borde);border-radius:1rem;overflow:hidden;}
+    th,td{border:1px solid var(--borde);padding:.6rem .4rem;text-align:center;font-size:.9rem;}
+    th{background:rgba(0,229,160,.15);color:var(--acento);}
+    .tabla-scroll{overflow-x:auto;}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;}
+    .logo{width:84px;height:84px;border-radius:50%;border:3px solid var(--acento);display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:700;color:var(--acento);margin:0 auto 1rem;box-shadow:0 0 25px rgba(0,229,160,.35);background:rgba(0,229,160,.08);}
+    .modo-hacker th{background-color:#87CEFA!important;color:#000!important;}
+    .modo-hacker td{background-color:#FFD700!important;color:#000!important;}
+    .vacio{opacity:.7;text-align:center;padding:1rem;}
+    #hud{display:flex;justify-content:space-between;margin-bottom:.8rem;font-size:1.05rem;}
+    #hud b{color:var(--acento);}
+    canvas{display:block;width:100%;background:rgba(244,246,255,.03);border:1px solid var(--borde);border-radius:1rem;}
+    .pista{opacity:.7;font-size:.9rem;margin-top:.8rem;text-align:center;}
+  </style>
+</head>
+<body>
+  <div class="contenedor">
+    <nav class="barra-superior">
+      <a href="menu.html">← Sala de Mando</a>
+      <span>Estación Lumina</span>
+    </nav>
+
+    <header class="encabezado">
+      <h1>Misión Estelar</h1>
+      <p>Atrapa las estrellas de energía y esquiva los meteoritos.</p>
+    </header>
+
+    <section class="tarjeta" id="intro">
+      <h2>La historia</h2>
+      <p>El núcleo de la Estación Lumina se está apagando. Sin él, la estación quedará a la deriva en el espacio y Emma no podrá regresar a clase en el LSB.</p>
+      <p style="margin-top:.8rem;">Tu misión: maneja la nave con las flechas del teclado (o con el mouse), atrapa <b>10 estrellas de energía</b> y esquiva los <b>meteoritos</b> para reencender el núcleo. Tienes <b>3 vidas</b>. ¡La estación cuenta contigo!</p>
+      <div class="fila-botones" style="margin-top:1.2rem;">
+        <button class="boton" onclick="iniciarMision()">Iniciar misión</button>
+      </div>
+    </section>
+
+    <section class="tarjeta" id="juegoZona" hidden>
+      <div id="hud">
+        <span>Estrellas: <b id="contEstrellas">0</b>/10</span>
+        <span>Vidas: <b id="contVidas">3</b></span>
+      </div>
+      <canvas id="juego" width="800" height="440"></canvas>
+      <p class="pista">Flechas izquierda/derecha o mouse para mover la nave.</p>
+    </section>
+
+    <section class="tarjeta" id="final" hidden>
+      <h2 id="finalTitulo"></h2>
+      <p id="finalTexto"></p>
+      <div class="fila-botones" style="margin-top:1.2rem;">
+        <button class="boton" id="btnReintentar" onclick="location.reload()">Reintentar</button>
+        <a class="boton secundario" href="menu.html">Volver a la Sala de Mando</a>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    let canvas, ctx, nave, estrellas, meteoros, recolectadas, vidas;
+    let jugando, corriendo, ultimoFrame, moverIzq, moverDer;
+    const naveVel = 340;
+
+    function iniciarMision() {
+      document.getElementById('intro').hidden = true;
+      const zona = document.getElementById('juegoZona');
+      zona.hidden = false;
+      document.getElementById('final').hidden = true;
+      canvas = document.getElementById('juego');
+      ctx = canvas.getContext('2d');
+      nave = { x: 0, y: 0, w: 44, h: 36 };
+      estrellas = [];
+      meteoros = [];
+      recolectadas = 0;
+      vidas = 3;
+      moverIzq = false;
+      moverDer = false;
+      jugando = true;
+      corriendo = true;
+      ultimoFrame = performance.now();
+      ajustarCanvas();
+      actualizarHud();
+      window.addEventListener('keydown', tecla);
+      window.addEventListener('keyup', tecla);
+      window.addEventListener('resize', ajustarCanvas);
+      canvas.addEventListener('mousemove', moverRaton);
+      requestAnimationFrame(loop);
+    }
+
+    function ajustarCanvas() {
+      const zona = document.getElementById('juegoZona');
+      canvas.width = zona.clientWidth;
+      canvas.height = Math.round(zona.clientWidth * 0.55);
+      if (nave) {
+        nave.x = Math.min(Math.max(nave.x, 0), canvas.width - nave.w);
+        nave.y = canvas.height - 70;
+      }
+    }
+
+    function tecla(e) {
+      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+        moverIzq = e.type === 'keydown';
+        e.preventDefault();
+      }
+      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+        moverDer = e.type === 'keydown';
+        e.preventDefault();
+      }
+    }
+
+    function moverRaton(e) {
+      if (canvas && nave) {
+        nave.x = e.offsetX - nave.w / 2;
+        nave.x = Math.max(0, Math.min(nave.x, canvas.width - nave.w));
+      }
+    }
+
+    function loop(ahora) {
+      if (!corriendo) return;
+      const dt = Math.min((ahora - ultimoFrame) / 1000, 0.05);
+      ultimoFrame = ahora;
+      if (jugando) {
+        if (moverIzq) nave.x -= naveVel * dt;
+        if (moverDer) nave.x += naveVel * dt;
+        nave.x = Math.max(0, Math.min(nave.x, canvas.width - nave.w));
+        generarObjetos(dt);
+        moverObjetos(dt);
+        chocar();
+      }
+      dibujar();
+      if (corriendo) requestAnimationFrame(loop);
+    }
+
+    function generarObjetos(dt) {
+      if (Math.random() < dt * 0.9) {
+        estrellas.push({ x: 12 + Math.random() * (canvas.width - 24), y: -18, r: 12, vel: 90 + Math.random() * 60 });
+      }
+      if (Math.random() < dt * 0.75) {
+        meteoros.push({ x: 15 + Math.random() * (canvas.width - 30), y: -20, r: 13 + Math.random() * 8, vel: 150 + Math.random() * 80 });
+      }
+    }
+
+    function moverObjetos(dt) {
+      estrellas.forEach(function (s) { s.y += s.vel * dt; });
+      meteoros.forEach(function (m) { m.y += m.vel * dt; });
+      estrellas = estrellas.filter(function (s) { return s.y < canvas.height + 30; });
+      meteoros = meteoros.filter(function (m) { return m.y < canvas.height + 30; });
+    }
+
+    function chocar() {
+      for (let i = estrellas.length - 1; i >= 0; i--) {
+        const s = estrellas[i];
+        if (toca(s, nave, s.r + 10)) {
+          estrellas.splice(i, 1);
+          recolectadas++;
+          actualizarHud();
+          if (recolectadas >= 10) { terminar(true); return; }
+        }
+      }
+      for (let i = meteoros.length - 1; i >= 0; i--) {
+        const m = meteoros[i];
+        if (toca(m, nave, m.r + 6)) {
+          meteoros.splice(i, 1);
+          vidas--;
+          actualizarHud();
+          if (vidas <= 0) { terminar(false); return; }
+        }
+      }
+    }
+
+    function toca(o, n, extra) {
+      const cx = Math.max(n.x, Math.min(o.x, n.x + n.w));
+      const cy = Math.max(n.y, Math.min(o.y, n.y + n.h));
+      const dx = o.x - cx;
+      const dy = o.y - cy;
+      return (dx * dx + dy * dy) < (extra * extra);
+    }
+
+    function actualizarHud() {
+      document.getElementById('contEstrellas').textContent = recolectadas;
+      document.getElementById('contVidas').textContent = vidas;
+    }
+
+    function terminar(ganaste) {
+      jugando = false;
+      corriendo = false;
+      document.getElementById('juegoZona').hidden = true;
+      document.getElementById('final').hidden = false;
+      if (ganaste) {
+        document.getElementById('finalTitulo').textContent = '¡Núcleo reencendido!';
+        document.getElementById('finalTexto').textContent = 'Atrapaste las 10 estrellas de energía y salvaste la Estación Lumina. Eres una piloto estrella.';
+        document.getElementById('btnReintentar').hidden = true;
+      } else {
+        document.getElementById('finalTitulo').textContent = 'La estación se apagó…';
+        document.getElementById('finalTexto').textContent = 'Tus vidas se agotaron. Entrena y vuelve a intentarlo: la estación y tu horario del 9C necesitan tu ayuda.';
+        document.getElementById('btnReintentar').hidden = false;
+      }
+    }
+
+    function dibujar() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      dibujarNave();
+      estrellas.forEach(dibujarEstrella);
+      meteoros.forEach(dibujarMeteoro);
+    }
+
+    function dibujarNave() {
+      ctx.save();
+      ctx.translate(nave.x + nave.w / 2, nave.y + nave.h / 2);
+      ctx.beginPath();
+      ctx.moveTo(0, -nave.h / 2);
+      ctx.lineTo(nave.w / 2, nave.h / 2);
+      ctx.lineTo(-nave.w / 2, nave.h / 2);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(0,229,160,0.25)';
+      ctx.fill();
+      ctx.strokeStyle = '#00E5A0';
+      ctx.lineWidth = 3;
+      ctx.lineJoin = 'round';
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.save();
+      ctx.beginPath();
+      const tx = nave.x + nave.w / 2;
+      const ty = nave.y + nave.h;
+      ctx.moveTo(tx - 8, ty);
+      ctx.quadraticCurveTo(tx, ty + 16 + Math.random() * 8, tx + 8, ty);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(0,229,160,0.7)';
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function dibujarEstrella(s) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0,229,160,0.35)';
+      ctx.fill();
+      ctx.strokeStyle = '#00E5A0';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.closePath();
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r / 2.6, 0, Math.PI * 2);
+      ctx.fillStyle = '#00E5A0';
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function dibujarMeteoro(m) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(m.x, m.y, m.r, 0, Math.PI * 2);
+      ctx.fillStyle = '#FF5C5C';
+      ctx.fill();
+      ctx.strokeStyle = '#B32D2D';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.restore();
+    }
+  </script>
+</body>
+</html>
