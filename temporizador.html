@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estación Lumina · Temporizador de estudio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --fondo:#0B1026;
+      --texto:#F4F6FF;
+      --acento:#00E5A0;
+      --acento-oscuro:#00C48A;
+      --tarjeta:rgba(244,246,255,0.06);
+      --borde:rgba(244,246,255,0.18);
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{
+      font-family:'Space Grotesk','Segoe UI',Arial,sans-serif;
+      background:var(--fondo);
+      color:var(--texto);
+      min-height:100vh;
+      padding:1.5rem 1rem 3rem;
+      background-image:
+        radial-gradient(circle at 20% 15%,rgba(0,229,160,0.12),transparent 40%),
+        radial-gradient(circle at 85% 85%,rgba(0,229,160,0.10),transparent 40%);
+      background-attachment:fixed;
+    }
+    .contenedor{max-width:840px;margin:0 auto;}
+    h1{font-size:2.5rem;line-height:1.15;margin-bottom:.5rem;}
+    h2{font-size:1.6rem;color:var(--acento);margin-bottom:1rem;}
+    h3{font-size:1.2rem;}
+    p{line-height:1.6;}
+    .encabezado{text-align:center;margin-bottom:2rem;}
+    .encabezado p{opacity:.85;}
+    .barra-superior{display:flex;justify-content:space-between;align-items:center;max-width:840px;margin:0 auto 1.5rem;}
+    .barra-superior a{color:var(--acento);text-decoration:none;font-weight:700;}
+    .tarjeta{background:var(--tarjeta);border:1px solid var(--borde);border-radius:1.2rem;padding:1.5rem;margin:1.25rem 0;}
+    .boton{
+      display:inline-block;
+      background:var(--acento);
+      color:#06281C;
+      border:none;
+      border-radius:999px;
+      padding:.85rem 1.7rem;
+      font-size:1rem;
+      font-weight:700;
+      font-family:inherit;
+      cursor:pointer;
+      text-decoration:none;
+      box-shadow:0 0 18px rgba(0,229,160,.35);
+      transition:transform .15s ease,background .15s ease;
+    }
+    .boton:hover{background:var(--acento-oscuro);transform:translateY(-2px);}
+    .boton.secundario{background:transparent;color:var(--texto);border:2px solid var(--borde);box-shadow:none;}
+    .boton.peligro{background:transparent;color:#FF5C5C;border:2px solid rgba(255,92,92,.5);box-shadow:none;}
+    .boton.peligro:hover{background:rgba(255,92,92,.15);}
+    .fila-botones{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;}
+    input,textarea,select{
+      width:100%;
+      background:rgba(244,246,255,.05);
+      border:1px solid var(--borde);
+      border-radius:.8rem;
+      color:var(--texto);
+      padding:.7rem 1rem;
+      font-family:inherit;
+      font-size:1rem;
+    }
+    input:focus,textarea:focus{outline:2px solid var(--acento);}
+    label{display:block;margin:1rem 0 .3rem;opacity:.9;}
+    .reloj{
+      text-align:center;
+      font-size:4.5rem;
+      font-weight:700;
+      letter-spacing:.05em;
+      color:var(--acento);
+      margin:1rem 0;
+      text-shadow:0 0 30px rgba(0,229,160,.4);
+      font-variant-numeric:tabular-nums;
+    }
+    .reloj.finalizando{color:#FF5C5C;text-shadow:0 0 30px rgba(255,92,92,.4);}
+    .pista{opacity:.7;font-size:.9rem;margin-top:.8rem;text-align:center;}
+    .presets{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;margin-bottom:1rem;}
+    .preset{
+      background:transparent;
+      color:var(--texto);
+      border:1px solid var(--borde);
+      border-radius:999px;
+      padding:.5rem 1.1rem;
+      font-family:inherit;
+      font-size:.9rem;
+      cursor:pointer;
+      transition:border-color .15s,color .15s;
+    }
+    .preset:hover{border-color:var(--acento);color:var(--acento);}
+    .estado-mision{text-align:center;opacity:.85;min-height:1.4rem;}
+  </style>
+</head>
+<body>
+  <div class="contenedor">
+    <nav class="barra-superior">
+      <a href="menu.html">← Sala de Mando</a>
+      <span>Estación Lumina</span>
+    </nav>
+
+    <header class="encabezado">
+      <h1>Temporizador de estudio</h1>
+      <p>Concentración total para tus misiones de clase. ¡Sin distracciones!</p>
+    </header>
+
+    <section class="tarjeta">
+      <h2>Configura la misión</h2>
+      <label>Minutos de estudio</label>
+      <input id="minutos" type="number" min="1" max="120" value="25">
+      <div class="fila-botones" style="margin-top:1.2rem;">
+        <button class="boton" onclick="configurar()">Iniciar</button>
+      </div>
+    </section>
+
+    <section class="tarjeta" id="cronometro" hidden>
+      <div class="presets">
+        <button class="preset" onclick="usarPreset(25)">25 min (Pomodoro)</button>
+        <button class="preset" onclick="usarPreset(45)">45 min (Clase)</button>
+        <button class="preset" onclick="usarPreset(10)">10 min (Descanso)</button>
+      </div>
+      <div class="reloj" id="pantalla">25:00</div>
+      <p class="estado-mision" id="estadoMision"></p>
+      <div class="fila-botones">
+        <button class="boton" id="btnPausa" onclick="pausar()">Pausar</button>
+        <button class="boton secundario" onclick="reiniciar()">Reiniciar</button>
+        <button class="boton peligro" onclick="detener()">Detener</button>
+      </div>
+      <p class="pista">Tip: apaga el celular y concéntrate como una verdadera astronauta.</p>
+    </section>
+  </div>
+
+  <script>
+    let totalSegundos, restantes, intervalo, corriendo;
+
+    function configurar() {
+      const minutos = parseInt(document.getElementById('minutos').value, 10);
+      if (isNaN(minutos) || minutos < 1 || minutos > 120) {
+        alert('Elige una cantidad de minutos entre 1 y 120.');
+        return;
+      }
+      arrancar(minutos * 60);
+    }
+
+    function usarPreset(min) {
+      document.getElementById('minutos').value = min;
+      arrancar(min * 60);
+    }
+
+    function arrancar(segundos) {
+      if (intervalo) clearInterval(intervalo);
+      totalSegundos = segundos;
+      restantes = segundos;
+      corriendo = true;
+      document.getElementById('cronometro').hidden = false;
+      document.getElementById('btnPausa').textContent = 'Pausar';
+      document.getElementById('estadoMision').textContent = '¡Misión de estudio en curso!';
+      pintar();
+      intervalo = setInterval(tick, 1000);
+    }
+
+    function tick() {
+      restantes--;
+      pintar();
+      if (restantes <= 0) {
+        clearInterval(intervalo);
+        intervalo = null;
+        corriendo = false;
+        document.getElementById('estadoMision').textContent = '¡Misión cumplida! Tiempo de estudio completado.';
+        try { navigator.vibrate && navigator.vibrate([200, 100, 200]); } catch (e) {}
+        alert('¡Tiempo cumplido! La Estación Lumina celebra tu esfuerzo.');
+      }
+    }
+
+    function pausar() {
+      if (!corriendo) return;
+      corriendo = false;
+      clearInterval(intervalo);
+      intervalo = null;
+      document.getElementById('btnPausa').textContent = 'Continuar';
+      document.getElementById('btnPausa').onclick = function () { reanudar(); };
+    }
+
+    function reanudar() {
+      corriendo = true;
+      document.getElementById('btnPausa').textContent = 'Pausar';
+      document.getElementById('btnPausa').onclick = function () { pausar(); };
+      intervalo = setInterval(tick, 1000);
+    }
+
+    function reiniciar() {
+      arrancar(totalSegundos);
+    }
+
+    function detener() {
+      if (intervalo) clearInterval(intervalo);
+      intervalo = null;
+      corriendo = false;
+      document.getElementById('cronometro').hidden = true;
+    }
+
+    function pintar() {
+      const m = Math.floor(restantes / 60);
+      const s = restantes % 60;
+      const pantalla = document.getElementById('pantalla');
+      pantalla.textContent =
+        String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+      pantalla.className = 'reloj' + (restantes <= 10 ? ' finalizando' : '');
+    }
+  </script>
+</body>
+</html>
